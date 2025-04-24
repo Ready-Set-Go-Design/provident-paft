@@ -41,7 +41,7 @@ function FormStatus({ currentFormPage }: FormStatusProps) {
   return (
     <div
       className={withPrefix(
-        "m-auto flex justify-between w-[calc(50%-2rem)] before:m-auto before:bg-gray-200 before:m-4 before:w-[50%] before:absolute before:mt-[6px] before:z-[-1] before:h-[4px] before:absolute"
+        "m-auto flex justify-between w-[50%] before:m-auto before:bg-gray-200 before:m-4 before:w-[calc(50%-2rem)] before:absolute before:mt-[6px] before:z-[-1] before:h-[4px] before:absolute"
       )}
     >
       {pageValidations.map((requirement: any, index: number) => {
