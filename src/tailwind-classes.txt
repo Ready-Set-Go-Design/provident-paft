@@ -3,10 +3,11 @@ pf:/
 pf:form_
 pf:page
 pf:page1
+pf:1
 pf:m-auto
 pf:flex
 pf:justify-between
-pf:w-[50%]
+pf:w-[calc(50%-2rem)]
 pf:before:m-auto
 pf:before:bg-gray-200
 pf:before:m-4
@@ -120,7 +121,6 @@ pf:canvas
 pf:trying
 pf:to
 pf:dispatch
-pf:1
 pf:void_cheque_image
 pf:failing
 pf:text-red-500
