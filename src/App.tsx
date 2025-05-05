@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import { Routes, Route } from "react-router";
 import { useLocation } from "react-router-dom";
-import FormStatus from "./FormStatus";
+import Stepper from "./Stepper";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./store/store";
 import { clearForm, emptyForm } from "./store/formSlice";
@@ -96,7 +96,7 @@ function App() {
         </AlertActions>
       </Alert>
 
-      <FormStatus currentFormPage={currentFormPage} />
+      <Stepper currentFormPage={currentFormPage} />
       <Routes>
         <Route path={"/"} element={<FormPage1 />} />
         <Route path="/form_page2" element={<FormPage2 />} />

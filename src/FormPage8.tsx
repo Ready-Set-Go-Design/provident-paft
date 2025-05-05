@@ -9,7 +9,6 @@ import { withPrefix } from "./utils/withPrefix";
 import { isPageValid } from "./utils/isPageValid";
 import { useMeasure } from "react-use";
 import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage";
-import { Input } from "./components/input";
 import { Checkbox, CheckboxField } from "./components/checkbox";
 import { Button } from "./components/button";
 
@@ -79,7 +78,7 @@ function FormPage8() {
             penColor="green"
             canvasProps={{
               width: width,
-              height: height,
+              height: "200px",
               className: "sigCanvas",
             }}
             onEnd={() => {
