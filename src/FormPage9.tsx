@@ -1,10 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import { clearForm, updateField } from "./store/formSlice";
+import { clearForm } from "./store/formSlice";
 import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
 import { useNavigate } from "react-router";
+import ReactPDF from "@react-pdf/renderer";
 
 import { withPrefix } from "./utils/withPrefix";
+import PDFTemplate from "./PDFTemplate";
+import { Button } from "./components/button";
 
 function FormPage9() {
   const dispatch = useDispatch();
@@ -22,6 +25,24 @@ function FormPage9() {
           A copy of this contract will be sent to{" "}
           <strong>{formData.email}</strong>.
         </div>
+      </div>
+
+      <div className={withPrefix("mb-4")}>
+        <Button
+          onClick={async () => {
+            const blob = await ReactPDF.pdf(
+              <PDFTemplate formData={formData} />
+            ).toBlob();
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "new_customer_form.pdf";
+            link.click();
+            URL.revokeObjectURL(url);
+          }}
+        >
+          Download PDF
+        </Button>
       </div>
 
       <div className={withPrefix("flex gap-2")}>

@@ -28,9 +28,13 @@ pf:ml-auto
 pf:rounded-xl
 pf:bg-green-600
 pf:bg-gray-400
+pf:row
+pf:A4
 pf:p-4
 pf:mb-4
 pf:mt-4
+pf:a
+pf:new_customer_form.pdf
 pf:gap-2
 pf:/page8
 pf:signature_image
@@ -977,7 +981,6 @@ pf:group-data-focus/option:text-white
 pf:before:w-2
 pf:before:min-w-0
 pf:before:shrink
-pf:a
 pf:has-[[data-slot=icon]:first-child]:[&_input]:pl-10
 pf:has-[[data-slot=icon]:last-child]:[&_input]:pr-10
 pf:sm:has-[[data-slot=icon]:first-child]:[&_input]:pl-8
