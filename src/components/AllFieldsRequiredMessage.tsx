@@ -13,10 +13,6 @@ export function AllFieldsRequiredMessage({
   const validatedForm = validateForm(formData).find(
     (requirement: any) => requirement.id === id
   );
-
-  console.log("validatedForm");
-  console.log(validatedForm);
-  console.log(formData);
   const { errors } = validatedForm;
 
   if (show) {

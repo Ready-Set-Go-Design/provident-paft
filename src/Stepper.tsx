@@ -11,7 +11,6 @@ interface StepperProps {
 
 function Stepper({ currentFormPage }: StepperProps) {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const formData = useSelector((state: RootState) => state.form);
 
   const pageValidations = validateForm(formData);
@@ -37,7 +36,7 @@ function Stepper({ currentFormPage }: StepperProps) {
   if (currentPageNumber === "") {
     currentPageNumber = "1";
   }
-  console.log(currentPageNumber);
+
   return (
     <div className="relative">
       <div

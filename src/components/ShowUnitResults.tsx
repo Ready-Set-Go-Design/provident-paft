@@ -5,42 +5,31 @@ const ShowUnitResults = ({
   searchResults,
   unitQuery,
   selectThisUnit,
-  formData,
 }: {
   searchResults: any;
   unitQuery: string;
   selectThisUnit: Function;
-  formData: any;
 }) => {
-  // console.log("searchResultsType", searchResultsType);
-
   const uniqueUnitesAtStreetNumber: any[] = [];
 
-  searchResults
-    .filter((address: AddressObject) =>
-      (address.street_address1 as string)
-        .toLowerCase()
-        .includes(unitQuery.toLowerCase())
-    )
-    .map((address: AddressObject) => {
+  if (unitQuery.trim() > "") {
+    searchResults.map((address: AddressObject) => {
       if (
         !uniqueUnitesAtStreetNumber.find(
           (unit) => unit.unit_number === address.unit_number
         )
       ) {
         uniqueUnitesAtStreetNumber.push({
-          unit_number: [
-            address.unit_type_1,
-            address.unit_type_2,
-            address.unit_number,
-          ]
+          unit_number: ["Suite", address.unit_number]
             .filter((item) => item !== undefined && item !== "")
             .join(" "),
           street_address: `${address.unit_number} ${address.street_number} ${address.street_name}`,
           street_name: address.street_name,
+          location_id: address.location_id,
         });
       }
     });
+  }
 
   if (unitQuery.length === 0) {
     return <div></div>;
@@ -57,18 +46,22 @@ const ShowUnitResults = ({
           There are <strong>{uniqueUnitesAtStreetNumber.length}</strong> units
           in that building, please select one:
         </div>
-        {uniqueUnitesAtStreetNumber.map((streetName, index) => (
-          <div
-            key={index}
-            className={withPrefix(
-              "cursor-pointer bg-blue-100 p-4 m-2 rounded-md"
-            )}
-            onClick={() => selectThisUnit(streetName.unit_number)}
-            // onClick={() => searchForAddresses(`${streetName.street_address}`)}
-          >
-            {streetName.unit_number}
-          </div>
-        ))}
+        {uniqueUnitesAtStreetNumber.map((streetName, index) => {
+          return (
+            <div
+              key={index}
+              className={withPrefix(
+                "cursor-pointer bg-blue-100 p-4 m-2 rounded-md"
+              )}
+              onClick={() =>
+                selectThisUnit(streetName.unit_number, streetName.location_id)
+              }
+              // onClick={() => searchForAddresses(`${streetName.street_address}`)}
+            >
+              {streetName.unit_number}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

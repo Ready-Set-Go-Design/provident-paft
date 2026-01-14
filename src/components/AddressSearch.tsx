@@ -19,8 +19,16 @@ function AddressSearch() {
   const searchResults = useSelector(
     (state: RootState) => state.address.filteredAddresses || []
   );
+
+  const unitResults = useSelector(
+    (state: RootState) => state.address.filteredUnits || []
+  );
   const [showResults, setShowResults] = useState<boolean>(
     searchResults.length > 0 ? true : false
+  );
+
+  const [showUnitResults, setShowUnitResults] = useState<boolean>(
+    unitResults.length > 0 ? true : false
   );
 
   const formData = useSelector((state: RootState) => state.form);
@@ -28,10 +36,10 @@ function AddressSearch() {
     formData.selected_address || ""
   );
 
-  const throttledSearch = useCallback(
+  const throttledBuildingSearch = useCallback(
     throttle(
       (addressQuery: string) => {
-        dispatch(searchAddressesAsync({ addressQuery }));
+        dispatch(searchAddressesAsync({ addressQuery, type: "BUILDING" }));
 
         if (addressQuery.length > 0) {
           setShowResults(true);
@@ -45,15 +53,48 @@ function AddressSearch() {
     [dispatch]
   );
 
-  const searchForAddresses = (query: string) => {
+  const throttledUnitSearch = useCallback(
+    throttle(
+      (addressQuery: string, selected_address: string) => {
+        const street_number = selected_address
+          ? selected_address.split(" ")[0]
+          : "";
+
+        const street_name = selected_address
+          ? selected_address.split(" ").slice(1).join(" ")
+          : "";
+
+        dispatch(
+          searchAddressesAsync({
+            addressQuery,
+            type: "UNIT",
+            street_number,
+            street_name,
+          })
+        );
+
+        if (addressQuery.length > 0) {
+          setShowUnitResults(true);
+        } else {
+          setShowUnitResults(false);
+        }
+      },
+      750,
+      { leading: false }
+    ),
+    [dispatch]
+  );
+
+  const searchForAddresses = async (query: string) => {
     setSearchQuery(query);
-    throttledSearch(query);
+    throttledBuildingSearch(query);
     dispatch(updateField({ field: "selected_address", value: "" }));
   };
 
   const searchForUnits = (query: string) => {
     setUnitQuery(query);
-    setShowResults(true);
+
+    throttledUnitSearch(query, formData.selected_address);
     // throttledSearch(searchQuery, query);
     // console.log("Searching for units:", query);
     dispatch(updateField({ field: "selected_unit", value: "" }));
@@ -61,20 +102,9 @@ function AddressSearch() {
 
   useEffect(() => {
     if (searchQuery.length > 0) {
-      throttledSearch(searchQuery);
+      throttledBuildingSearch(searchQuery);
     }
   }, []);
-
-  const searchForAddressesImmediately = (query: string) => {
-    setSearchQuery(query);
-    dispatch(searchAddressesAsync({ addressQuery: query }));
-
-    if (query.length > 0) {
-      setShowResults(true);
-    } else {
-      setShowResults(false);
-    }
-  };
 
   const selectThisAddress = (address: string) => {
     setSearchQuery(address);
@@ -83,9 +113,11 @@ function AddressSearch() {
     // searchForAddressesImmediately(address);
   };
 
-  const selectThisUnit = (unit: string) => {
+  const selectThisUnit = (unit: string, location_id: string) => {
     setUnitQuery(unit);
     dispatch(updateField({ field: "selected_unit", value: unit }));
+    console.log("setting location id", location_id);
+    dispatch(updateField({ field: "location_id", value: location_id }));
   };
 
   return (
@@ -143,7 +175,7 @@ function AddressSearch() {
                       dispatch(
                         updateField({ field: "selected_unit", value: "" })
                       );
-                      setShowResults(false);
+                      setShowUnitResults(false);
                     }}
                   >
                     <span className={withPrefix("text-red-500")}>X</span>
@@ -189,7 +221,8 @@ function AddressSearch() {
 
       {searchResults.length > 0 &&
         showResults === true &&
-        (!formData.selected_address || formData.selected_address === "") && (
+        (!formData.selected_address || formData.selected_address === "") &&
+        searchQuery > "" && (
           <ShowSearchResultsByType
             searchResults={searchResults as any}
             selectThisAddress={selectThisAddress}
@@ -242,11 +275,10 @@ function AddressSearch() {
             </Table>
           )}
           {searchResults.length > 0 &&
-            showResults === true &&
+            showUnitResults === true &&
             (!formData.selected_unit || formData.selected_unit === "") && (
               <ShowUnitResults
-                searchResults={searchResults as any}
-                formData={formData}
+                searchResults={unitResults as any}
                 unitQuery={unitQuery}
                 selectThisUnit={selectThisUnit}
               />

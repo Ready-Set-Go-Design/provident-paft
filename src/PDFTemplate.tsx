@@ -1,6 +1,4 @@
 import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
-import { RootState } from "./store/store";
-import { useSelector } from "react-redux";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -21,7 +19,6 @@ const PDFTemplate = ({ formData }: { formData: any }) => {
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.section}>
-          <Text>Section #1</Text>
           <Text>
             {formData.first_name} {formData.last_name}
           </Text>

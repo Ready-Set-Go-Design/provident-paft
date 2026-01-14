@@ -1,4 +1,3 @@
-import { add } from "lodash";
 import parseAddress from "parse-address-string";
 
 interface AddressObject {

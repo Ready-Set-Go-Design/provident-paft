@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { clearForm } from "./store/formSlice";
+import { clearSubmission, updateField } from "./store/submissionSlice";
 import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
 import { useNavigate } from "react-router";
@@ -8,11 +9,62 @@ import ReactPDF from "@react-pdf/renderer";
 import { withPrefix } from "./utils/withPrefix";
 import PDFTemplate from "./PDFTemplate";
 import { Button } from "./components/button";
+import { useEffect } from "react";
+import { submitForm } from "./utils/submitForm";
 
 function FormPage9() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formData = useSelector((state: RootState) => state.form);
+  const submissionData = useSelector((state: RootState) => state.submission);
+
+  const { submitted, error } = submissionData;
+
+  useEffect(() => {
+    // submit form
+    if (!submitted && formData) {
+      console.log("submitting");
+      doSubmitForm();
+    }
+  }, [submitted, formData]);
+
+  const doSubmitForm = async () => {
+    try {
+      const submission = await submitForm(formData);
+
+      if (submission.result === true) {
+        dispatch(updateField({ field: "submitted", value: true }));
+      } else {
+        dispatch(updateField({ field: "error", value: submission.error }));
+      }
+    } catch (error) {
+      dispatch(updateField({ field: "error", value: error as string }));
+    }
+  };
+
+  if (!submitted && !error) {
+    return (
+      <div className={withPrefix("p-4")}>
+        <div className={withPrefix("mb-4")}>
+          <h1>Submitting your application...</h1>
+        </div>
+      </div>
+    );
+  }
+
+  if (!submitted && error) {
+    return (
+      <div className={withPrefix("p-4")}>
+        <div className={withPrefix("mb-4")}>
+          <h1>There was a problem submitting your application.</h1>
+
+          <div className={withPrefix("mb-4")}>
+            Please go back and try again.
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={withPrefix("p-4")}>
@@ -50,6 +102,7 @@ function FormPage9() {
           outline={true}
           action={() => {
             dispatch(clearForm());
+            dispatch(clearSubmission());
             navigate("/");
           }}
           label={"Return to Homepage"}
