@@ -30,11 +30,11 @@ function FormPage5() {
   );
 
   return (
-    <div className={withPrefix("p-4")}>
+    <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
       {formData.payment_mode === "" && (
         <div className={withPrefix("mb-4")}>
-          You must select a payment mode first.
-          <br />
+          <h1 className={withPrefix("py-4 text-2xl")}>Payment Mode Required</h1>
+
           <NavButton
             outline={true}
             action={() => navigate("/form_page4")}
@@ -45,7 +45,9 @@ function FormPage5() {
       )}
       {formData.payment_mode === "provide_banking_information" && (
         <div>
-          <h1>Provide Banking Information</h1>
+          <h1 className={withPrefix("py-4 text-2xl")}>
+            Provide Banking Information
+          </h1>
 
           <Field className={withPrefix("mb-4")}>
             <Label className={withPrefix("font-bold")}>
@@ -122,8 +124,7 @@ function FormPage5() {
 
       {formData.payment_mode === "provide_void_cheque" && (
         <div>
-          {" "}
-          <h1>Upload a void cheque</h1>
+          <h1 className={withPrefix("py-4 text-2xl")}>Upload a Void Cheque</h1>
           <Input
             invalid={
               showValidationError &&
@@ -310,6 +311,7 @@ function FormPage5() {
           }}
           label={"Save and Continue"}
           currentPage="page5"
+          disabledButClickable={!pageIsValid}
         />
       </div>
     </div>

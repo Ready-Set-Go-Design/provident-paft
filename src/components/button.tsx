@@ -116,8 +116,18 @@ const styles = {
       "text-lime-950 [--btn-hover-overlay:var(--color-white)]/25 [--btn-bg:var(--color-lime-300)] [--btn-border:var(--color-lime-400)]/80",
       "[--btn-icon:var(--color-lime-600)] data-active:[--btn-icon:var(--color-lime-700)] data-hover:[--btn-icon:var(--color-lime-700)]",
     ],
+    brand: [
+      "text-white [--btn-hover-overlay:var(--color-white)]/10 [--btn-bg:var(--primary-color)] [--btn-border:var(--primary-color)]/90",
+      "[--btn-icon:var(--color-primary-color)]/40 data-active:[--btn-icon:var(--primary-color)]/50 data-hover:[--btn-icon:var(--primary-color)]/50",
+      "data-disabled:[--btn-bg:var(--color-gray-400)] data-disabled:[--btn-border:var(--color-gray-400)]/90",
+    ],
+    disabled: [
+      "text-white [--btn-hover-overlay:var(--button-disabled)]/10 [--btn-bg:var(--var(--button-disabled))] [--btn-border:var(--button-disabled)]/90",
+      "[--btn-icon:var(--button-disabled)]/40 data-active:[--btn-icon:var(--button-disabled)]/50 data-hover:[--btn-icon:var(--button-disabled)]/50",
+      "data-disabled:[--btn-bg:var(--button-disabled)] data-disabled:[--btn-border:var(--button-disabled))]/90",
+    ],
     green: [
-      "text-white [--btn-hover-overlay:var(--color-white)]/10 [--btn-bg:var(--color-green-600)] [--btn-border:var(--color-green-700)]/90",
+      "text-white [--btn-hover-overlay:var(--color-white)]/10 [--btn-bg:var(--primary-color)] [--btn-border:var(--color-green-700)]/90",
       "[--btn-icon:var(--color-white)]/60 data-active:[--btn-icon:var(--color-white)]/80 data-hover:[--btn-icon:var(--color-white)]/80",
     ],
     emerald: [

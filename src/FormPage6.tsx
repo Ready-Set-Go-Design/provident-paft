@@ -22,9 +22,9 @@ function FormPage6() {
   const from = urlParams.get("from");
 
   return (
-    <div className={withPrefix("p-4")}>
+    <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
       <div>
-        <h1>Terms and Conditions</h1>
+        <h1 className={withPrefix("py-4 text-2xl")}>Terms And Conditions</h1>
 
         <p>
           Provident Energy Management Inc. (“Provident”) has been retained
@@ -85,6 +85,7 @@ function FormPage6() {
             }
           }}
           currentPage="page6"
+          disabledButClickable={!pageIsValid}
         />
       </div>
     </div>

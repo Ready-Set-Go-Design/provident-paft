@@ -10,9 +10,9 @@ import { withPrefix } from "./utils/withPrefix";
 import { Checkbox, CheckboxField } from "./components/checkbox";
 import { isPageValid } from "./utils/isPageValid";
 import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage";
+import { validateForm } from "./utils/validateForm";
 
 function FormPage4() {
-  const [mode, setMode] = useState<string>("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formData = useSelector((state: RootState) => state.form);
@@ -22,16 +22,18 @@ function FormPage4() {
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const from = urlParams.get("from");
+  const validatedForm = validateForm(formData).find(
+    (requirement: any) => requirement.id === "/page4"
+  );
 
   return (
-    <div className={withPrefix("p-4")}>
-      <div></div>
-      <h2>Pre-Authorized Payments</h2>
+    <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
+      <h1 className={withPrefix("py-4 text-2xl")}>Pre-Authorized Payments</h1>
 
       <div>
         <RadioGroup
           className={withPrefix(
-            "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
+            "border-1 rounded-md pf:overflow-hidden p-2 pt-0",
             showValidationError && formData.payment_mode === ""
               ? "border-red-500"
               : "border-transparent"
@@ -123,6 +125,7 @@ function FormPage4() {
           }}
           label={"Save and Continue"}
           currentPage="page4"
+          disabledButClickable={!validatedForm.valid}
         />
       </div>
     </div>

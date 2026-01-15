@@ -72,8 +72,6 @@ function App() {
 
   return (
     <>
-      <h1 className={withPrefix("p-4 text-2xl")}>Form Test</h1>
-
       <Alert open={showResetMessage} onClose={() => setShowResetMessage(false)}>
         <AlertTitle>You have an application in-progress</AlertTitle>
         <AlertDescription>

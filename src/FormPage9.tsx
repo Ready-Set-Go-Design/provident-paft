@@ -23,7 +23,6 @@ function FormPage9() {
   useEffect(() => {
     // submit form
     if (!submitted && formData) {
-      console.log("submitting");
       doSubmitForm();
     }
   }, [submitted, formData]);
@@ -44,22 +43,34 @@ function FormPage9() {
 
   if (!submitted && !error) {
     return (
-      <div className={withPrefix("p-4")}>
-        <div className={withPrefix("mb-4")}>
-          <h1>Submitting your application...</h1>
-        </div>
+      <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
+        <h1 className={withPrefix("py-4 text-2xl")}>Submitting Agreement...</h1>
       </div>
     );
   }
 
   if (!submitted && error) {
     return (
-      <div className={withPrefix("p-4")}>
+      <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
+        <h1 className={withPrefix("py-4 text-2xl")}>Submission Error</h1>
         <div className={withPrefix("mb-4")}>
-          <h1>There was a problem submitting your application.</h1>
-
-          <div className={withPrefix("mb-4")}>
-            Please go back and try again.
+          <div className={withPrefix("mt-4 mb-4")}>
+            There was a problem submitting your agreement. Please go back and
+            try again.
+          </div>
+        </div>
+        <div className={withPrefix("mt-8 flex")}>
+          <div>
+            <NavButton
+              outline={true}
+              action={() => {
+                dispatch(clearForm());
+                dispatch(clearSubmission());
+                navigate("/");
+              }}
+              label={"Return to Homepage"}
+              currentPage=""
+            />
           </div>
         </div>
       </div>
@@ -67,7 +78,8 @@ function FormPage9() {
   }
 
   return (
-    <div className={withPrefix("p-4")}>
+    <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
+      <h1 className={withPrefix("py-4 text-2xl")}>Submission Complete</h1>
       <div className={withPrefix("mb-4")}>
         <h1>
           Thanks for completing the Customer Service Agreement with Provident
@@ -79,7 +91,7 @@ function FormPage9() {
         </div>
       </div>
 
-      <div className={withPrefix("mb-4")}>
+      <div className={withPrefix("flex gap-2 mt-8")}>
         <Button
           onClick={async () => {
             const blob = await ReactPDF.pdf(
@@ -95,9 +107,6 @@ function FormPage9() {
         >
           Download PDF
         </Button>
-      </div>
-
-      <div className={withPrefix("flex gap-2")}>
         <NavButton
           outline={true}
           action={() => {

@@ -17,9 +17,8 @@ function FormPage2() {
   const from = urlParams.get("from");
 
   return (
-    <div className={withPrefix("p-4")}>
-      <div></div>
-      <h2>Your service address</h2>
+    <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
+      <h1 className={withPrefix("py-4 text-2xl")}>Your Service Address</h1>
 
       <div>This is the address you're moving to.</div>
       <AddressSearch />
@@ -36,6 +35,7 @@ function FormPage2() {
             }
           }}
           currentPage="page2"
+          disabledButClickable={!pageIsValid}
         />
       </div>
     </div>

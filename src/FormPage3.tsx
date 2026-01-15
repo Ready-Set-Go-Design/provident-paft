@@ -27,9 +27,8 @@ function FormPage3() {
   const from = urlParams.get("from");
 
   return (
-    <div className={withPrefix("p-4")}>
-      <div></div>
-      <h2>Primary Account Holder</h2>
+    <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
+      <h1 className={withPrefix("py-4 text-2xl")}>Primary Account Holder</h1>
       <Field className={withPrefix("mb-4")}>
         <Label>First Name</Label>
 
@@ -107,6 +106,7 @@ function FormPage3() {
             }
           }}
           currentPage="page3"
+          disabledButClickable={!validatedForm.valid}
         />
       </div>
     </div>

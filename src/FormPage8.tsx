@@ -56,10 +56,9 @@ function FormPage8() {
   }, []);
 
   return (
-    <div className={withPrefix("p-4")}>
+    <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
+      <h1 className={withPrefix("py-4 text-2xl")}>Signature</h1>
       <div className={withPrefix("mb-4")}>
-        <h1>Signature</h1>
-
         <div>
           By typing your name in the fields below, you are legally signing this
           digital form.
@@ -136,6 +135,7 @@ function FormPage8() {
             }
           }}
           currentPage="page8"
+          disabledButClickable={!pageIsValid}
         />
       </div>
     </div>

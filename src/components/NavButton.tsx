@@ -9,6 +9,7 @@ function NavButton({
   disabled,
   outline,
   currentPage,
+  disabledButClickable,
 }: {
   action: Function;
   label: string;
@@ -16,6 +17,7 @@ function NavButton({
   currentPage?: string;
   outline?: boolean;
   fullWidth?: string;
+  disabledButClickable?: boolean;
 }) {
   const dispatch = useDispatch();
 
@@ -29,10 +31,19 @@ function NavButton({
     >
       <Button
         disabled={disabled}
-        color="green"
+        color={disabledButClickable ? "disabled" : "brand"}
         {...((outline as any) && { outline })}
         onClick={() => {
           action();
+          if (disabledButClickable) {
+            console.log("trying!");
+            setTimeout(() => {
+              window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: "smooth",
+              });
+            }, 100);
+          }
 
           dispatch(addPageVisit(currentPage as string));
         }}
