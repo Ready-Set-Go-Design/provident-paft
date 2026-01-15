@@ -70,7 +70,7 @@ const formSlice = createSlice({
         state[field] = value;
       }
       try {
-        localStorage.setItem("customerFormData", JSON.stringify(state));
+        localStorage.setItem("providentMoveOutData", JSON.stringify(state));
       } catch (error) {}
     },
     clearForm: (state) => {
@@ -79,14 +79,14 @@ const formSlice = createSlice({
         JSON.parse(JSON.stringify(emptyForm)) as FormState
       );
       localStorage.setItem(
-        "customerFormData",
+        "providentMoveOutData",
         JSON.stringify(emptyFormInstance)
       );
     },
     addPageVisit: (state, action: PayloadAction<string>) => {
       if (!state.pageVisited.includes(action.payload)) {
         state.pageVisited.push(action.payload);
-        localStorage.setItem("customerFormData", JSON.stringify(state));
+        localStorage.setItem("providentMoveOutData", JSON.stringify(state));
       }
     },
   },

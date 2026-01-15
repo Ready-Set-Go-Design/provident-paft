@@ -2,38 +2,24 @@ export const validationRequirements = [
   {
     id: "/",
     fields: [
-      { name: "occupancy_type" },
-      { name: "occupancy_day" },
-      { name: "occupancy_month" },
-      { name: "occupancy_year" },
-    ],
-  },
-  {
-    id: "/page2",
-    fields: [{ name: "selected_address" }, { name: "selected_unit" }],
-  },
-  {
-    id: "/page3",
-    fields: [
       { name: "first_name" },
       { name: "last_name" },
       {
-        conditional: "occupancy_type",
-        value: "HOME_OWNER",
-        id: "business_name",
+        name: "business_name",
       },
+
       { name: "email", format: "email" },
     ],
   },
   {
-    id: "/page4",
+    id: "/page2",
     fields: [
       { name: "payment_mode" },
       { name: "accept_preauth_terms_and_conditions" },
     ],
   },
   {
-    id: "/page5",
+    id: "/page3",
     fields: [
       {
         conditional: "payment_mode",
@@ -63,14 +49,13 @@ export const validationRequirements = [
       },
     ],
   },
-  { id: "/page6", fields: [{ name: "accept_terms_and_conditions" }] },
-  { id: "/page7", fields: [] },
+  { id: "/page4", fields: [{ name: "accept_terms_and_conditions" }] },
   {
-    id: "/page8",
+    id: "/page5",
     fields: [
       { name: "verify_entered_information" },
       { name: "signature_image" },
     ],
   },
-  { id: "/page9", fields: [] },
+  { id: "/page6", fields: [] },
 ];

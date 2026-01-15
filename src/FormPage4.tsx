@@ -3,14 +3,12 @@ import { updateField } from "./store/formSlice";
 import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
 import { useLocation, useNavigate } from "react-router";
-import { useState } from "react";
-import { Radio, RadioField, RadioGroup } from "./components/radio";
-import { Description, Label } from "./components/fieldset";
 import { withPrefix } from "./utils/withPrefix";
-import { Checkbox, CheckboxField } from "./components/checkbox";
 import { isPageValid } from "./utils/isPageValid";
 import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage";
-import { validateForm } from "./utils/validateForm";
+import { useState } from "react";
+
+import { Checkbox, CheckboxField } from "./components/checkbox";
 
 function FormPage4() {
   const dispatch = useDispatch();
@@ -22,100 +20,63 @@ function FormPage4() {
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const from = urlParams.get("from");
-  const validatedForm = validateForm(formData).find(
-    (requirement: any) => requirement.id === "/page4"
-  );
 
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
-      <h1 className={withPrefix("py-4 text-2xl")}>Pre-Authorized Payments</h1>
-
       <div>
-        <RadioGroup
+        <h1 className={withPrefix("py-4 text-2xl")}>Terms And Conditions</h1>
+
+        <p>
+          Provident Energy Management Inc. (“Provident”) has been retained
+          pursuant to an Agreement (the “Master Agreement”) by the developer,
+          the owner, the condominium corporation and/or the authorized agent, as
+          applicable (the “Owner/Condominium”), of the premises in which the
+          above‐noted Service Address is located and/or of premises that are
+          invoiced for utilities that include utilities consumed at or by the
+          above‐noted Service Address (the “Premises”) to supply the Services
+          (as defined below) including meter reading, billing and collection
+          services. The terms and conditions set out in this agreement comprise
+          the legally binding agreement between the individual(s) named as
+          Primary Account Holder and Secondary Account Holder (if any)
+          (“Customer”) and Provident governing Customer’s use of the Services
+          (as defined below). This Agreement is subject to Provident’s
+          Conditions of Service (as applicable to the services provided by
+          Provident at the Premises) (the “Conditions”), which may be accessed
+          at www.pemi.com. In consideration of Provident providing the Services,
+          and for other good and valuable consideration, the receipt of which is
+          acknowledged by Customer, Customer acknowledges and agrees as follows:
+        </p>
+
+        <CheckboxField
           className={withPrefix(
-            "border-1 rounded-md pf:overflow-hidden p-2 pt-0",
-            showValidationError && formData.payment_mode === ""
+            "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
+            showValidationError && formData.accept_terms_and_conditions === ""
               ? "border-red-500"
               : "border-transparent"
           )}
-          name="payment_mode"
-          defaultValue="provide_banking_information"
-          value={formData.payment_mode}
-          onChange={(e) => {
-            dispatch(
-              updateField({
-                field: "payment_mode",
-                value: e,
-              })
-            );
-          }}
         >
-          <RadioField>
-            <Radio value="provide_banking_information" color="green" />
-            <Label>Provide banking information</Label>
-            <Description>
-              Customers can provide their banking information for payments.
-            </Description>
-          </RadioField>
-          <RadioField>
-            <Radio value="provide_void_cheque" color="green" />
-            <Label>Provide a void cheque</Label>
-            <Description>
-              Customers can provide a void cheque for payments.
-            </Description>
-          </RadioField>
-        </RadioGroup>
+          <Checkbox
+            color="green"
+            name="accept_terms_and_conditions"
+            value={formData.accept_terms_and_conditions}
+            checked={formData.accept_terms_and_conditions == "true"}
+            onChange={(checked) => {
+              dispatch(
+                updateField({
+                  field: "accept_terms_and_conditions",
+                  value: checked ? "true" : "",
+                })
+              );
+            }}
+          />{" "}
+          I accept the terms and conditions of pre-auth payments
+        </CheckboxField>
       </div>
 
-      <CheckboxField
-        className={withPrefix(
-          "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
-          showValidationError &&
-            formData.accept_preauth_terms_and_conditions === ""
-            ? "border-red-500"
-            : "border-transparent"
-        )}
-      >
-        <Checkbox
-          color="green"
-          name="accept_preauth_terms_and_conditions"
-          value={formData.accept_preauth_terms_and_conditions}
-          checked={formData.accept_preauth_terms_and_conditions === "true"}
-          onChange={(checked) => {
-            dispatch(
-              updateField({
-                field: "accept_preauth_terms_and_conditions",
-                value: checked ? "true" : "",
-              })
-            );
-          }}
-        />
-        <Label>I accept the terms and conditions of pre-auth payments</Label>
-      </CheckboxField>
-
-      <AllFieldsRequiredMessage show={showValidationError} id="/page4" />
-      <div className={withPrefix("flex gap-2 mt-4")}>
+      <div className={withPrefix("mt-4")}>
+        <AllFieldsRequiredMessage show={showValidationError} id="/page4" />
         <NavButton
-          outline={true}
-          action={() => {
-            dispatch(
-              updateField({
-                field: "accept_preauth_terms_and_conditions",
-                value: "",
-              })
-            );
-            dispatch(
-              updateField({
-                field: "payment_mode",
-                value: "",
-              })
-            );
-            navigate(from ? `/form_${from}` : "/form_page6");
-          }}
-          label={"Skip this step"}
-        />
-
-        <NavButton
+          label="Save and Continue"
           action={() => {
             if (pageIsValid) {
               navigate(from ? `/form_${from}` : "/form_page5");
@@ -123,9 +84,8 @@ function FormPage4() {
               setShowValidationError(true);
             }
           }}
-          label={"Save and Continue"}
           currentPage="page4"
-          disabledButClickable={!validatedForm.valid}
+          disabledButClickable={!pageIsValid}
         />
       </div>
     </div>

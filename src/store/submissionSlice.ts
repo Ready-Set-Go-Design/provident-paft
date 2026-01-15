@@ -14,7 +14,7 @@ export const emptySubmission: SubmissionState = {
 };
 
 const getInitialState = (): SubmissionState => {
-  const savedData = localStorage.getItem("customerSubmissionData");
+  const savedData = localStorage.getItem("moveOutSubmissionData");
   if (savedData) {
     return JSON.parse(savedData);
   }
@@ -37,7 +37,7 @@ const submissionSlice = createSlice({
         state[field] = value;
       }
       try {
-        localStorage.setItem("customerSubmissionData", JSON.stringify(state));
+        localStorage.setItem("moveOutSubmissionData", JSON.stringify(state));
       } catch (error) {}
     },
     clearSubmission: (state) => {
@@ -45,9 +45,9 @@ const submissionSlice = createSlice({
         state,
         JSON.parse(JSON.stringify(emptySubmission)) as SubmissionState
       );
-      console.log("setting form to empty", emptyFormInstance);
+
       localStorage.setItem(
-        "customerFormData",
+        "moveOutSubmissionData",
         JSON.stringify(emptyFormInstance)
       );
     },

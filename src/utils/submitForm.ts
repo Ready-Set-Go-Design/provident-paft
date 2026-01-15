@@ -3,7 +3,7 @@ export const submitForm = async (formData: any) => {
     const sanitizedForm = { ...formData };
     // Remove any fields that are not needed for submission
     delete sanitizedForm.error;
-    const response = await fetch("http://localhost:3002/move-in-submission", {
+    const response = await fetch("http://localhost:3002/paft-submission", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
