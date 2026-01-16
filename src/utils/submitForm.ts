@@ -3,13 +3,16 @@ export const submitForm = async (formData: any) => {
     const sanitizedForm = { ...formData };
     // Remove any fields that are not needed for submission
     delete sanitizedForm.error;
-    const response = await fetch("http://localhost:3002/paft-submission", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${(import.meta as any).env.VITE_API_URL}/submissions/paft`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(sanitizedForm),
       },
-      body: JSON.stringify(sanitizedForm),
-    });
+    );
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

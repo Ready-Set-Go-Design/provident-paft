@@ -97,12 +97,12 @@ function FormPage6() {
         <Button
           onClick={async () => {
             const blob = await ReactPDF.pdf(
-              <PDFTemplate formData={formData} />
+              <PDFTemplate formData={formData} />,
             ).toBlob();
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.href = url;
-            link.download = "new_customer_form.pdf";
+            link.download = "paft_form.pdf";
             link.click();
             URL.revokeObjectURL(url);
           }}
