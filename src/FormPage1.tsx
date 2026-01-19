@@ -3,13 +3,14 @@ import { updateField } from "./store/formSlice";
 import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
 import { useLocation, useNavigate } from "react-router";
-import { Input } from "./components/input";
 import { withPrefix } from "./utils/withPrefix";
 import { isPageValid } from "./utils/isPageValid";
 import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage";
 import { useState } from "react";
 import { validateForm } from "./utils/validateForm";
 import { Field, Label } from "./components/fieldset";
+import { FooterWrapper } from "./components/FooterWrapper";
+import { WrappedInput } from "./components/WrappedInput";
 
 function FormPage1() {
   const dispatch = useDispatch();
@@ -19,95 +20,132 @@ function FormPage1() {
     useState<boolean>(false);
   const pageIsValid = isPageValid("/");
   const validatedForm = validateForm(formData).find(
-    (requirement: any) => requirement.id === "/"
+    (requirement: any) => requirement.id === "/",
   );
 
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const from = urlParams.get("from");
-
+  console.log(formData);
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
       <h1 className={withPrefix("py-4 text-2xl")}>Primary Account Holder</h1>
       <Field className={withPrefix("mb-4")}>
         <Label>First Name</Label>
 
-        <Input
-          invalid={showValidationError && formData.first_name === ""}
+        <WrappedInput
+          showSearch={false}
+          invalid={
+            showValidationError && validatedForm?.errors.includes("First Name")
+          }
           type="text"
           name="first_name"
+          placeholder={""}
           value={formData.first_name}
-          onChange={(e) => {
+          onChange={(e: any) => {
             dispatch(
-              updateField({ field: "first_name", value: e.currentTarget.value })
+              updateField({
+                field: "first_name",
+                value: e,
+              }),
             );
+          }}
+          clearAction={(e: any) => {
+            dispatch(updateField({ field: "first_name", value: "" }));
           }}
         />
       </Field>
       <Field className={withPrefix("mb-4")}>
         <Label>Last Name</Label>
-        <Input
-          invalid={showValidationError && formData.last_name === ""}
+        <WrappedInput
+          showSearch={false}
+          invalid={
+            showValidationError && validatedForm?.errors.includes("Last Name")
+          }
           type="text"
           name="last_name"
+          placeholder={""}
           value={formData.last_name}
-          onChange={(e) => {
+          onChange={(e: any) => {
             dispatch(
-              updateField({ field: "last_name", value: e.currentTarget.value })
+              updateField({
+                field: "last_name",
+                value: e,
+              }),
             );
+          }}
+          clearAction={(e: any) => {
+            dispatch(updateField({ field: "last_name", value: "" }));
           }}
         />
       </Field>
 
-      {formData.occupancy_type.toLowerCase() !== "tenant" && (
-        <Field className={withPrefix("mb-4")}>
-          <Label>Business Name</Label>
-          <Input
-            invalid={showValidationError && formData.business_name === ""}
-            type="text"
-            name="business_name"
-            value={formData.business_name}
-            onChange={(e) => {
-              dispatch(
-                updateField({
-                  field: "business_name",
-                  value: e.currentTarget.value,
-                })
-              );
-            }}
-          />
-        </Field>
-      )}
+      <Field className={withPrefix("mb-4")}>
+        <Label>Business Name</Label>
+        <WrappedInput
+          showSearch={false}
+          invalid={
+            showValidationError &&
+            validatedForm?.errors.includes("Business Name")
+          }
+          type="text"
+          name="business_name"
+          placeholder={""}
+          value={formData.business_name}
+          onChange={(e: any) => {
+            dispatch(
+              updateField({
+                field: "last_name",
+                value: e,
+              }),
+            );
+          }}
+          clearAction={(e: any) => {
+            dispatch(updateField({ field: "last_name", value: "" }));
+          }}
+        />
+      </Field>
+
       <Field className={withPrefix("mb-4")}>
         <Label>Email Address</Label>
-        <Input
+        <WrappedInput
+          showSearch={false}
           invalid={
             showValidationError && validatedForm?.errors.includes("Email")
           }
           type="email"
           name="email"
+          placeholder={""}
           value={formData.email}
-          onChange={(e) => {
+          onChange={(e: any) => {
             dispatch(
-              updateField({ field: "email", value: e.currentTarget.value })
+              updateField({
+                field: "email",
+                value: e,
+              }),
             );
+          }}
+          clearAction={(e: any) => {
+            dispatch(updateField({ field: "email", value: "" }));
           }}
         />
       </Field>
       <div className={withPrefix("mt-4")}>
         <AllFieldsRequiredMessage show={showValidationError} id="/" />
-        <NavButton
-          label="Save and Continue"
-          action={() => {
-            if (pageIsValid) {
-              navigate(from ? `/form_${from}` : "/form_page2");
-            } else {
-              setShowValidationError(true);
-            }
-          }}
-          currentPage="page1"
-          disabledButClickable={!validatedForm.valid}
-        />
+        <FooterWrapper>
+          <NavButton
+            label="Save and Continue"
+            action={() => {
+              if (pageIsValid) {
+                navigate(from ? `/form_${from}` : "/form_page2");
+              } else {
+                setShowValidationError(true);
+              }
+            }}
+            currentPage="page1"
+            disabledButClickable={!validatedForm.valid}
+          />
+        </FooterWrapper>
       </div>
     </div>
   );

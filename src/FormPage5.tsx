@@ -11,6 +11,7 @@ import { useMeasure } from "react-use";
 import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage";
 import { Checkbox, CheckboxField } from "./components/checkbox";
 import { Button } from "./components/button";
+import { FooterWrapper } from "./components/FooterWrapper";
 
 function FormPage5() {
   const dispatch = useDispatch();
@@ -69,7 +70,7 @@ function FormPage5() {
             "border-1 rounded p-4 mt-4 w-full h-full min-h-[130px] mb-4",
             showValidationError && formData.signature_image === ""
               ? "border-red-500"
-              : "border-gray-300"
+              : "border-gray-300",
           )}
           ref={containerRef as unknown as React.RefObject<HTMLDivElement>}
         >
@@ -87,7 +88,7 @@ function FormPage5() {
                   updateField({
                     field: "signature_image",
                     value: base64 as string,
-                  })
+                  }),
                 );
               }
             }}
@@ -102,7 +103,7 @@ function FormPage5() {
             "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
             showValidationError && formData.verify_entered_information === ""
               ? "border-red-500"
-              : "border-transparent"
+              : "border-transparent",
           )}
         >
           <Checkbox
@@ -115,7 +116,7 @@ function FormPage5() {
                 updateField({
                   field: "verify_entered_information",
                   value: checked ? "true" : "",
-                })
+                }),
               );
             }}
           />{" "}
@@ -125,18 +126,20 @@ function FormPage5() {
 
       <div className={withPrefix("mt-4")}>
         <AllFieldsRequiredMessage show={showValidationError} id="/page5" />
-        <NavButton
-          label="Submit"
-          action={() => {
-            if (pageIsValid) {
-              navigate("/form_page6");
-            } else {
-              setShowValidationError(true);
-            }
-          }}
-          currentPage="page5"
-          disabledButClickable={!pageIsValid}
-        />
+        <FooterWrapper>
+          <NavButton
+            label="Submit"
+            action={() => {
+              if (pageIsValid) {
+                navigate("/form_page6");
+              } else {
+                setShowValidationError(true);
+              }
+            }}
+            currentPage="page5"
+            disabledButClickable={!pageIsValid}
+          />
+        </FooterWrapper>
       </div>
     </div>
   );

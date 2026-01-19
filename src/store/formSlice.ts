@@ -50,7 +50,7 @@ export const emptyForm: FormState = {
 };
 
 const getInitialState = (): FormState => {
-  const savedData = localStorage.getItem("customerFormData");
+  const savedData = localStorage.getItem("paftFormData");
   if (savedData) {
     return JSON.parse(savedData);
   }
@@ -63,7 +63,7 @@ const formSlice = createSlice({
   reducers: {
     updateField: (
       state,
-      action: PayloadAction<{ field: keyof FormState; value: string }>
+      action: PayloadAction<{ field: keyof FormState; value: string }>,
     ) => {
       const { field, value } = action.payload;
       if (field !== "pageVisited") {
@@ -76,11 +76,11 @@ const formSlice = createSlice({
     clearForm: (state) => {
       const emptyFormInstance = Object.assign(
         state,
-        JSON.parse(JSON.stringify(emptyForm)) as FormState
+        JSON.parse(JSON.stringify(emptyForm)) as FormState,
       );
       localStorage.setItem(
         "providentMoveOutData",
-        JSON.stringify(emptyFormInstance)
+        JSON.stringify(emptyFormInstance),
       );
     },
     addPageVisit: (state, action: PayloadAction<string>) => {

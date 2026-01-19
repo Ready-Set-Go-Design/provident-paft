@@ -14,7 +14,7 @@ export const emptySubmission: SubmissionState = {
 };
 
 const getInitialState = (): SubmissionState => {
-  const savedData = localStorage.getItem("moveOutSubmissionData");
+  const savedData = localStorage.getItem("paftFormData");
   if (savedData) {
     return JSON.parse(savedData);
   }
@@ -30,26 +30,23 @@ const submissionSlice = createSlice({
       action: PayloadAction<{
         field: keyof SubmissionState;
         value: string | boolean;
-      }>
+      }>,
     ) => {
       const { field, value } = action.payload;
       if (field !== "pageVisited") {
         state[field] = value;
       }
       try {
-        localStorage.setItem("moveOutSubmissionData", JSON.stringify(state));
+        localStorage.setItem("paftFormData", JSON.stringify(state));
       } catch (error) {}
     },
     clearSubmission: (state) => {
       const emptyFormInstance = Object.assign(
         state,
-        JSON.parse(JSON.stringify(emptySubmission)) as SubmissionState
+        JSON.parse(JSON.stringify(emptySubmission)) as SubmissionState,
       );
 
-      localStorage.setItem(
-        "moveOutSubmissionData",
-        JSON.stringify(emptyFormInstance)
-      );
+      localStorage.setItem("paftFormData", JSON.stringify(emptyFormInstance));
     },
   },
 });

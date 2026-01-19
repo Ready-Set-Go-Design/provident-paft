@@ -11,6 +11,7 @@ import PDFTemplate from "./PDFTemplate";
 import { Button } from "./components/button";
 import { useEffect, useRef } from "react";
 import { submitForm } from "./utils/submitForm";
+import { FooterWrapper } from "./components/FooterWrapper";
 
 function FormPage6() {
   const dispatch = useDispatch();
@@ -109,6 +110,8 @@ function FormPage6() {
         >
           Download PDF
         </Button>
+      </div>
+      <FooterWrapper>
         <NavButton
           outline={true}
           action={() => {
@@ -119,7 +122,7 @@ function FormPage6() {
           label={"Return to Homepage"}
           currentPage=""
         />
-      </div>
+      </FooterWrapper>
     </div>
   );
 }

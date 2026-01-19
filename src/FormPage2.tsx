@@ -11,6 +11,7 @@ import { Checkbox, CheckboxField } from "./components/checkbox";
 import { isPageValid } from "./utils/isPageValid";
 import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage";
 import { validateForm } from "./utils/validateForm";
+import { FooterWrapper } from "./components/FooterWrapper";
 
 function FormPage2() {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ function FormPage2() {
   const urlParams = new URLSearchParams(location.search);
   const from = urlParams.get("from");
   const validatedForm = validateForm(formData).find(
-    (requirement: any) => requirement.id === "/page2"
+    (requirement: any) => requirement.id === "/page2",
   );
 
   return (
@@ -36,7 +37,7 @@ function FormPage2() {
             "border-1 rounded-md pf:overflow-hidden p-2 pt-0",
             showValidationError && formData.payment_mode === ""
               ? "border-red-500"
-              : "border-transparent"
+              : "border-transparent",
           )}
           name="payment_mode"
           defaultValue="provide_banking_information"
@@ -46,7 +47,7 @@ function FormPage2() {
               updateField({
                 field: "payment_mode",
                 value: e,
-              })
+              }),
             );
           }}
         >
@@ -73,7 +74,7 @@ function FormPage2() {
           showValidationError &&
             formData.accept_preauth_terms_and_conditions === ""
             ? "border-red-500"
-            : "border-transparent"
+            : "border-transparent",
         )}
       >
         <Checkbox
@@ -86,7 +87,7 @@ function FormPage2() {
               updateField({
                 field: "accept_preauth_terms_and_conditions",
                 value: checked ? "true" : "",
-              })
+              }),
             );
           }}
         />
@@ -94,7 +95,7 @@ function FormPage2() {
       </CheckboxField>
 
       <AllFieldsRequiredMessage show={showValidationError} id="/page2" />
-      <div className={withPrefix("flex gap-2 mt-4")}>
+      <FooterWrapper>
         <NavButton
           action={() => {
             if (pageIsValid) {
@@ -107,7 +108,7 @@ function FormPage2() {
           currentPage="page2"
           disabledButClickable={!validatedForm.valid}
         />
-      </div>
+      </FooterWrapper>
     </div>
   );
 }
