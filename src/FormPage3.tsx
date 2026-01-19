@@ -261,7 +261,8 @@ function FormPage3() {
       <AllFieldsRequiredMessage show={showValidationError} id="/page3" />
       <FooterWrapper>
         {formData.payment_mode === "provide_void_cheque" &&
-          formData.void_cheque_image === "" && (
+          (formData.void_cheque_image === "" ||
+            !formData.void_cheque_image) && (
             <Button
               outline={true}
               className={withPrefix(

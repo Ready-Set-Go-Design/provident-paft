@@ -1384,8 +1384,8 @@ pf:hover:bg-(--primary-color)
 pf:hover:text-white
 pf:`${streetName.street_address}`
 pf:`${address.street_number}
+pf:disabledButClickable
 pf:disabled
-pf:trying!
 pf:smooth
 pf:bottom-0
 pf:bg-gray-100

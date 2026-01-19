@@ -26,7 +26,7 @@ function FormPage1() {
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const from = urlParams.get("from");
-  console.log(formData);
+  console.log(validatedForm);
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
       <h1 className={withPrefix("py-4 text-2xl")}>Primary Account Holder</h1>
@@ -95,13 +95,13 @@ function FormPage1() {
           onChange={(e: any) => {
             dispatch(
               updateField({
-                field: "last_name",
+                field: "business_name",
                 value: e,
               }),
             );
           }}
           clearAction={(e: any) => {
-            dispatch(updateField({ field: "last_name", value: "" }));
+            dispatch(updateField({ field: "business_name", value: "" }));
           }}
         />
       </Field>

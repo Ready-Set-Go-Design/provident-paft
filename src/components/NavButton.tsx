@@ -20,7 +20,7 @@ function NavButton({
   disabledButClickable?: boolean;
 }) {
   const dispatch = useDispatch();
-
+  console.log("disabledButClickable", disabledButClickable);
   return (
     <Button
       disabled={disabled}
@@ -29,7 +29,6 @@ function NavButton({
       onClick={() => {
         action();
         if (disabledButClickable) {
-          console.log("trying!");
           setTimeout(() => {
             window.scrollTo({
               top: document.body.scrollHeight,
