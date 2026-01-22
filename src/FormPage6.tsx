@@ -4,14 +4,13 @@ import { clearSubmission, updateField } from "./store/submissionSlice";
 import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
 import { useNavigate } from "react-router";
-import ReactPDF from "@react-pdf/renderer";
 
 import { withPrefix } from "./utils/withPrefix";
-import PDFTemplate from "./PDFTemplate";
 import { Button } from "./components/button";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { submitForm } from "./utils/submitForm";
 import { FooterWrapper } from "./components/FooterWrapper";
+import { requestPDF } from "./utils/requestPDF";
 
 function FormPage6() {
   const dispatch = useDispatch();
@@ -19,12 +18,18 @@ function FormPage6() {
   const hasSubmitted = useRef(false);
   const formData = useSelector((state: RootState) => state.form);
   const submissionData = useSelector((state: RootState) => state.submission);
+  const [pdfDownloadError, setPdfDownloadError] = useState<string | null>(null);
 
   const { submitted, error } = submissionData;
 
   useEffect(() => {
     // submit form
-    if (!submitted && formData && !hasSubmitted.current) {
+    if (
+      !submitted &&
+      formData &&
+      formData.signature_image > "" &&
+      !hasSubmitted.current
+    ) {
       doSubmitForm();
       hasSubmitted.current = true;
     }
@@ -35,6 +40,12 @@ function FormPage6() {
       const submission = await submitForm(formData);
 
       if (submission.result === true) {
+        dispatch(
+          updateField({
+            field: "submission_id",
+            value: submission.submissionId,
+          }),
+        );
         dispatch(updateField({ field: "submitted", value: true }));
       } else {
         dispatch(updateField({ field: "error", value: submission.error }));
@@ -97,19 +108,28 @@ function FormPage6() {
       <div className={withPrefix("flex gap-2 mt-8")}>
         <Button
           onClick={async () => {
-            const blob = await ReactPDF.pdf(
-              <PDFTemplate formData={formData} />,
-            ).toBlob();
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = "paft_form.pdf";
-            link.click();
-            URL.revokeObjectURL(url);
+            console.log("clicking");
+            console.log(submissionData);
+            setPdfDownloadError(null);
+            try {
+              // Check if we have a PDF blob from the new API response
+              if (submissionData && submissionData.submission_id) {
+                await requestPDF(submissionData.submission_id);
+              }
+            } catch (error) {
+              const errorMessage =
+                error instanceof Error ? error.message : String(error);
+              setPdfDownloadError(errorMessage);
+            }
           }}
         >
           Download PDF
         </Button>
+        {pdfDownloadError && (
+          <div className={withPrefix("text-(--validation-error-color)")}>
+            Error downloading PDF: {pdfDownloadError}
+          </div>
+        )}
       </div>
       <FooterWrapper>
         <NavButton

@@ -20,7 +20,6 @@ function NavButton({
   disabledButClickable?: boolean;
 }) {
   const dispatch = useDispatch();
-  console.log("disabledButClickable", disabledButClickable);
   return (
     <Button
       disabled={disabled}
