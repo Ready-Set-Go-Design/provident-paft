@@ -45,6 +45,8 @@ pf:text-2xl
 pf:mb-4
 pf:mt-4
 pf:mt-8
+pf:Start
+pf:Over
 pf:gap-2
 pf:clicking
 pf:text-(--validation-error-color)
@@ -151,6 +153,7 @@ pf:Email
 pf:email
 pf:/form_page2
 pf:pageVisited
+pf:form_page6
 pf:clsx
 pf:pf
 pf:`${prefix}:`
