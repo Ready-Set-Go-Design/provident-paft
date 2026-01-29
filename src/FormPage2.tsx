@@ -53,14 +53,18 @@ function FormPage2() {
         >
           <RadioField>
             <Radio value="provide_banking_information" color="green" />
-            <Label>Provide banking information</Label>
+            <Label className={withPrefix("text-sm font-bold")}>
+              Provide banking information
+            </Label>
             <Description>
               Customers can provide their banking information for payments.
             </Description>
           </RadioField>
           <RadioField>
             <Radio value="provide_void_cheque" color="green" />
-            <Label>Provide a void cheque</Label>
+            <Label className={withPrefix("text-sm font-bold")}>
+              Provide a void cheque
+            </Label>
             <Description>
               Customers can provide a void cheque for payments.
             </Description>
@@ -91,7 +95,9 @@ function FormPage2() {
             );
           }}
         />
-        <Label>I accept the terms and conditions of pre-auth payments</Label>
+        <Label className={withPrefix("text-sm font-bold")}>
+          I accept the terms and conditions of pre-auth payments
+        </Label>
       </CheckboxField>
 
       <AllFieldsRequiredMessage show={showValidationError} id="/page2" />

@@ -31,7 +31,7 @@ function FormPage1() {
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
       <h1 className={withPrefix("py-4 text-2xl")}>Primary Account Holder</h1>
       <Field className={withPrefix("mb-4")}>
-        <Label>First Name</Label>
+        <Label className={withPrefix("text-sm font-bold")}>First Name</Label>
 
         <WrappedInput
           showSearch={false}
@@ -56,7 +56,7 @@ function FormPage1() {
         />
       </Field>
       <Field className={withPrefix("mb-4")}>
-        <Label>Last Name</Label>
+        <Label className={withPrefix("text-sm font-bold")}>Last Name</Label>
         <WrappedInput
           showSearch={false}
           invalid={
@@ -81,7 +81,13 @@ function FormPage1() {
       </Field>
 
       <Field className={withPrefix("mb-4")}>
-        <Label>Business Name</Label>
+        <Label className={withPrefix("text-sm font-bold")}>
+          Business Name
+          <br />
+          <div className={withPrefix("font-normal text-gray-500 mb-1")}>
+            If you wish this account be under a business enter the name below
+          </div>
+        </Label>
         <WrappedInput
           showSearch={false}
           invalid={
@@ -107,7 +113,7 @@ function FormPage1() {
       </Field>
 
       <Field className={withPrefix("mb-4")}>
-        <Label>Email Address</Label>
+        <Label className={withPrefix("text-sm font-bold")}>Email Address</Label>
         <WrappedInput
           showSearch={false}
           invalid={

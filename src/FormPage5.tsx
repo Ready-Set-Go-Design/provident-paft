@@ -66,12 +66,12 @@ function FormPage5() {
         </div>
 
         <div
-          className={withPrefix(
+          className={`${formData.signature_image === "" ? "sig-canvas" : ""} ${withPrefix(
             "border-1 rounded p-4 mt-4 w-full h-full min-h-[130px] mb-4",
             showValidationError && formData.signature_image === ""
               ? "border-red-500"
               : "border-gray-300",
-          )}
+          )} `}
           ref={containerRef as unknown as React.RefObject<HTMLDivElement>}
         >
           <SignatureCanvas

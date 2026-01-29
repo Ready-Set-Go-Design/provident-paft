@@ -56,6 +56,7 @@ pf:load
 pf:2d
 pf:src
 pf:resize
+pf:sig-canvas
 pf:border-1
 pf:rounded
 pf:h-full
@@ -90,6 +91,7 @@ pf:Payment
 pf:Mode
 pf:false
 pf:provide_banking_information
+pf:text-sm
 pf:font-bold
 pf:Branch
 pf:Transit
@@ -147,6 +149,9 @@ pf:text
 pf:first_name
 pf:Last
 pf:last_name
+pf:font-normal
+pf:text-gray-500
+pf:mb-1
 pf:Business
 pf:business_name
 pf:Email
@@ -267,7 +272,6 @@ pf:code
 pf:rounded-sm
 pf:bg-zinc-950/[2.5%]
 pf:px-0.5
-pf:text-sm
 pf:sm:text-[0.8125rem]
 pf:use
 pf:client
@@ -555,7 +559,6 @@ pf:hr
 pf:my-4
 pf:lg:-mx-4
 pf:h3
-pf:mb-1
 pf:px-2
 pf:text-xs/6
 pf:gap-3

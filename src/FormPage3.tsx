@@ -52,7 +52,7 @@ function FormPage3() {
           </h1>
 
           <Field className={withPrefix("mb-4")}>
-            <Label className={withPrefix("font-bold")}>
+            <Label className={withPrefix("text-sm font-bold")}>
               Branch Transit Number
             </Label>
             <WrappedInput
@@ -82,7 +82,9 @@ function FormPage3() {
             />
           </Field>
           <Field className={withPrefix("mb-4")}>
-            <Label>Financial Institution Number</Label>
+            <Label className={withPrefix("text-sm font-bold")}>
+              Financial Institution Number
+            </Label>
             <WrappedInput
               showSearch={false}
               invalid={
@@ -113,7 +115,7 @@ function FormPage3() {
             />
           </Field>
           <Field className={withPrefix("mb-4")}>
-            <Label className={withPrefix("font-bold")}>
+            <Label className={withPrefix("text-sm font-bold")}>
               Bank Account Number
             </Label>
             <WrappedInput

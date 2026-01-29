@@ -64,6 +64,15 @@ function App() {
     } else {
       setShowResetMessage(applicationInProgress);
     }
+
+    // if application is submitted and am not on page 6, redirect to page 6
+    console.log(submission, location.pathname);
+    if (
+      submission.submitted &&
+      location.pathname.indexOf("form_page6") === -1
+    ) {
+      navigate("/form_page6");
+    }
   }, []); // Only run on mount
 
   const handleStartOver = () => {
