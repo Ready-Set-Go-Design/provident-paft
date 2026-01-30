@@ -5,16 +5,22 @@ import NavButton from "./components/NavButton";
 import { useLocation, useNavigate } from "react-router";
 import { withPrefix } from "./utils/withPrefix";
 import { isPageValid } from "./utils/isPageValid";
-import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage";
 import { useState } from "react";
-
-import { Checkbox, CheckboxField } from "./components/checkbox";
+import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage";
+import { Input } from "./components/input";
+import { validateForm } from "./utils/validateForm";
+import { Field, Label } from "./components/fieldset";
+import { Button } from "./components/button";
 import { FooterWrapper } from "./components/FooterWrapper";
+import { WrappedInput } from "./components/WrappedInput";
+import { CloudArrowUpIcon } from "./components/icons/CloudArrowUpIcon";
 
 function FormPage4() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formData = useSelector((state: RootState) => state.form);
+  const [voidChequeImageError, setVoidChequeImageError] =
+    useState<boolean>(false);
   const [showValidationError, setShowValidationError] =
     useState<boolean>(false);
   const pageIsValid = isPageValid("/page4");
@@ -22,75 +28,321 @@ function FormPage4() {
   const urlParams = new URLSearchParams(location.search);
   const from = urlParams.get("from");
 
+  const validatedForm = validateForm(formData).find(
+    (requirement: any) => requirement.id === "/page4",
+  );
+
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
-      <div>
-        <h1 className={withPrefix("py-4 text-2xl")}>Terms And Conditions</h1>
+      {formData.payment_mode === "" && (
+        <div className={withPrefix("mb-4")}>
+          <h1 className={withPrefix("py-4 text-2xl")}>Payment Mode Required</h1>
 
-        <p>
-          Provident Energy Management Inc. (“Provident”) has been retained
-          pursuant to an Agreement (the “Master Agreement”) by the developer,
-          the owner, the condominium corporation and/or the authorized agent, as
-          applicable (the “Owner/Condominium”), of the premises in which the
-          above‐noted Service Address is located and/or of premises that are
-          invoiced for utilities that include utilities consumed at or by the
-          above‐noted Service Address (the “Premises”) to supply the Services
-          (as defined below) including meter reading, billing and collection
-          services. The terms and conditions set out in this agreement comprise
-          the legally binding agreement between the individual(s) named as
-          Primary Account Holder and Secondary Account Holder (if any)
-          (“Customer”) and Provident governing Customer’s use of the Services
-          (as defined below). This Agreement is subject to Provident’s
-          Conditions of Service (as applicable to the services provided by
-          Provident at the Premises) (the “Conditions”), which may be accessed
-          at www.pemi.com. In consideration of Provident providing the Services,
-          and for other good and valuable consideration, the receipt of which is
-          acknowledged by Customer, Customer acknowledges and agrees as follows:
-        </p>
-
-        <CheckboxField
-          className={withPrefix(
-            "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
-            showValidationError && formData.accept_terms_and_conditions === ""
-              ? "border-red-500"
-              : "border-transparent",
-          )}
-        >
-          <Checkbox
-            color="green"
-            name="accept_terms_and_conditions"
-            value={formData.accept_terms_and_conditions}
-            checked={formData.accept_terms_and_conditions == "true"}
-            onChange={(checked) => {
-              dispatch(
-                updateField({
-                  field: "accept_terms_and_conditions",
-                  value: checked ? "true" : "",
-                }),
-              );
-            }}
-          />{" "}
-          I accept the terms and conditions of pre-auth payments
-        </CheckboxField>
-      </div>
-
-      <div className={withPrefix("mt-4")}>
-        <AllFieldsRequiredMessage show={showValidationError} id="/page4" />
-        <FooterWrapper>
           <NavButton
-            label="Save and Continue"
-            action={() => {
-              if (pageIsValid) {
-                navigate(from ? `/form_${from}` : "/form_page5");
-              } else {
-                setShowValidationError(true);
-              }
-            }}
-            currentPage="page4"
-            disabledButClickable={!pageIsValid}
+            outline={true}
+            action={() => navigate("/form_page4")}
+            label="Select Payment Mode"
+            fullWidth="false"
           />
-        </FooterWrapper>
-      </div>
+        </div>
+      )}
+      {formData.payment_mode === "provide_banking_information" && (
+        <div>
+          <h1 className={withPrefix("py-4 text-2xl")}>
+            Provide Banking Information
+          </h1>
+
+          <Field className={withPrefix("mb-4")}>
+            <Label className={withPrefix("text-sm font-bold")}>
+              Branch Transit Number
+            </Label>
+            <WrappedInput
+              showSearch={false}
+              invalid={
+                showValidationError &&
+                validatedForm?.errors.includes("Branch Transit Number")
+              }
+              type="number"
+              name="branch_transit_number"
+              placeholder={"5-digit Branch Transit Number"}
+              value={formData.branch_transit_number}
+              onChange={(e: any) => {
+                if (e.length <= 5)
+                  dispatch(
+                    updateField({
+                      field: "branch_transit_number",
+                      value: e,
+                    }),
+                  );
+              }}
+              clearAction={(e: any) => {
+                dispatch(
+                  updateField({ field: "branch_transit_number", value: "" }),
+                );
+              }}
+            />
+          </Field>
+          <Field className={withPrefix("mb-4")}>
+            <Label className={withPrefix("text-sm font-bold")}>
+              Financial Institution Number
+            </Label>
+            <WrappedInput
+              showSearch={false}
+              invalid={
+                showValidationError &&
+                validatedForm?.errors.includes("Financial Institution Number")
+              }
+              type="number"
+              name="financial_institution_number"
+              placeholder={"3-digit Financial Institution Number"}
+              value={formData.financial_institution_number}
+              onChange={(e: any) => {
+                if (e.length <= 3)
+                  dispatch(
+                    updateField({
+                      field: "financial_institution_number",
+                      value: e,
+                    }),
+                  );
+              }}
+              clearAction={(e: any) => {
+                dispatch(
+                  updateField({
+                    field: "financial_institution_number",
+                    value: "",
+                  }),
+                );
+              }}
+            />
+          </Field>
+          <Field className={withPrefix("mb-4")}>
+            <Label className={withPrefix("text-sm font-bold")}>
+              Bank Account Number
+            </Label>
+            <WrappedInput
+              showSearch={false}
+              invalid={
+                showValidationError &&
+                validatedForm?.errors.includes("Bank Account Number")
+              }
+              type="number"
+              name="bank_account_number"
+              placeholder={"7-digit Bank Account Number"}
+              value={formData.bank_account_number}
+              onChange={(e: any) => {
+                if (e.length <= 7)
+                  dispatch(
+                    updateField({
+                      field: "bank_account_number",
+                      value: e,
+                    }),
+                  );
+              }}
+              clearAction={(e: any) => {
+                dispatch(
+                  updateField({ field: "bank_account_number", value: "" }),
+                );
+              }}
+            />
+          </Field>
+        </div>
+      )}
+
+      {formData.payment_mode === "provide_void_cheque" && (
+        <div>
+          <h1 className={withPrefix("py-4 text-2xl")}>Upload a Void Cheque</h1>
+          <div className={withPrefix("mt-2 mb-4 pf:text-gray-600")}>
+            Upload a picture of a void cheque from your camera roll or take a
+            picture of a void cheque with you camera.
+          </div>
+
+          {(!formData.void_cheque_image ||
+            (formData.void_cheque_image &&
+              formData.void_cheque_image === "")) && (
+            <div className={withPrefix("flex justify-center")}>
+              <div
+                className={withPrefix(
+                  "border-2 border-gray-300 rounded-xl p-4 w-[200px] pf:bg-gray-100 text-center text-gray-600 flex flex-col  items-center justify-center cursor-pointer",
+                )}
+                onClick={() => {
+                  const fileInput = document.querySelector(
+                    'input[name="void_cheque"]',
+                  ) as HTMLInputElement;
+                  fileInput.click();
+                }}
+              >
+                <CloudArrowUpIcon />
+                Click here to select an image or take a picture
+              </div>
+            </div>
+          )}
+          <Input
+            invalid={
+              showValidationError &&
+              validatedForm?.errors.includes("Provide Void Cheque")
+            }
+            type="file"
+            className={withPrefix("hidden")}
+            name="void_cheque"
+            placeholder="Upload your void cheque"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+
+              if (!file) {
+                setVoidChequeImageError(true);
+                return;
+              }
+              if (file.type !== "image/jpeg" && file.type !== "image/png") {
+                setVoidChequeImageError(true);
+                return;
+              }
+              if (file) {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  if (reader.result) {
+                    const imageData = reader.result.toString();
+                    if (!imageData || file.size > 1500000) {
+                      if (file.size > 1500000) {
+                        const img = new Image();
+                        img.onload = () => {
+                          const canvas = document.createElement("canvas");
+                          const ctx = canvas.getContext("2d");
+                          if (!ctx) return;
+
+                          const scaleFactor = Math.sqrt(1500000 / file.size);
+                          canvas.width = img.width * scaleFactor;
+                          canvas.height = img.height * scaleFactor;
+
+                          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                          canvas.toBlob(
+                            (blob) => {
+                              if (blob && blob.size <= 1500000) {
+                                const resizedReader = new FileReader();
+                                resizedReader.onloadend = () => {
+                                  if (resizedReader.result) {
+                                    dispatch(
+                                      updateField({
+                                        field: "void_cheque_image",
+                                        value: resizedReader.result.toString(),
+                                      }),
+                                    );
+                                    setVoidChequeImageError(false);
+                                  }
+                                };
+                                resizedReader.readAsDataURL(blob);
+                              } else {
+                                setVoidChequeImageError(true);
+                              }
+                            },
+                            "image/jpeg",
+                            0.9,
+                          );
+                        };
+                        img.src = imageData;
+                      } else {
+                        setVoidChequeImageError(true);
+                      }
+                    } else {
+                      dispatch(
+                        updateField({
+                          field: "void_cheque_image",
+                          value: imageData,
+                        }),
+                      );
+                      setVoidChequeImageError(false);
+                    }
+                  }
+                };
+                reader.readAsDataURL(file);
+              }
+
+              // load image data from this file
+            }}
+          />
+          <div className={withPrefix("mb-4")}>
+            {voidChequeImageError && (
+              <div className={withPrefix("text-red-500")}>
+                Please upload a valid image file (JPEG or PNG).
+              </div>
+            )}
+          </div>
+          {formData.void_cheque_image && formData.void_cheque_image > "" && (
+            <div>
+              <div className={withPrefix("max-w-full h-auto")}>
+                <img
+                  className={withPrefix("object-contain")}
+                  src={formData.void_cheque_image}
+                />
+              </div>
+            </div>
+          )}
+          {formData.payment_mode === "provide_void_cheque" &&
+            formData.void_cheque_image > "" && (
+              <div className={withPrefix("justify-end flex mt-4")}>
+                <Button
+                  outline={true}
+                  onClick={() => {
+                    dispatch(
+                      updateField({
+                        field: "void_cheque_image",
+                        value: "",
+                      }),
+                    );
+                    const fileInput = document.querySelector(
+                      'input[name="void_cheque"]',
+                    ) as HTMLInputElement;
+                    fileInput.click();
+                  }}
+                >
+                  Replace Image
+                </Button>
+              </div>
+            )}
+        </div>
+      )}
+      <AllFieldsRequiredMessage show={showValidationError} id="/page4" />
+      <FooterWrapper>
+        <NavButton
+          action={() => {
+            console.log(formData.payment_mode);
+            if (pageIsValid) {
+              if (formData.payment_mode === "provide_banking_information") {
+                dispatch(
+                  updateField({
+                    field: "void_cheque_image",
+                    value: "",
+                  }),
+                );
+              } else if (formData.payment_mode === "provide_void_cheque") {
+                dispatch(
+                  updateField({
+                    field: "branch_transit_number",
+                    value: "",
+                  }),
+                );
+                dispatch(
+                  updateField({
+                    field: "bank_account_number",
+                    value: "",
+                  }),
+                );
+                dispatch(
+                  updateField({
+                    field: "financial_institution_number",
+                    value: "",
+                  }),
+                );
+              }
+              navigate(from ? `/form_${from}` : "/form_page5");
+            } else {
+              setShowValidationError(true);
+            }
+          }}
+          label={"Save and Continue"}
+          currentPage="page4"
+          disabledButClickable={!pageIsValid}
+        />
+      </FooterWrapper>
     </div>
   );
 }

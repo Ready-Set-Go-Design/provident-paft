@@ -12,9 +12,10 @@ import FormPage1 from "./FormPage1";
 import FormPage2 from "./FormPage2";
 import FormPage3 from "./FormPage3";
 import FormPage4 from "./FormPage4";
-
 import FormPage5 from "./FormPage5";
+
 import FormPage6 from "./FormPage6";
+import FormPage7 from "./FormPage7";
 import {
   Alert,
   AlertActions,
@@ -56,17 +57,16 @@ function App() {
       }
     }
 
-    if (
-      submission.submitted &&
-      location.pathname.indexOf("form_page6") !== -1
-    ) {
+    if (submission.submitted && location.pathname === "/") {
+      dispatch(clearForm());
+      dispatch(clearSubmission());
       setShowResetMessage(false);
     } else {
       setShowResetMessage(applicationInProgress);
     }
 
     // if application is submitted and am not on page 6, redirect to page 6
-    console.log(submission, location.pathname);
+
     if (
       submission.submitted &&
       location.pathname.indexOf("form_page6") === -1
@@ -106,6 +106,7 @@ function App() {
         <Route path="/form_page4" element={<FormPage4 />} />
         <Route path="/form_page5" element={<FormPage5 />} />
         <Route path="/form_page6" element={<FormPage6 />} />
+        <Route path="/form_page7" element={<FormPage7 />} />
       </Routes>
     </>
   );

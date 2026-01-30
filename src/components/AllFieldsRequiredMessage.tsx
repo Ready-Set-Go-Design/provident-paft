@@ -18,6 +18,8 @@ export function AllFieldsRequiredMessage({
 
   const { errors } = validatedForm;
 
+  console.log("AllFieldsRequiredMessage - errors:", errors);
+
   if (show) {
     if (errors.length > 0 || override) {
       return (

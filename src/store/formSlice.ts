@@ -36,6 +36,7 @@ export const emptyForm: FormState = {
   last_name: "",
   business_name: "",
   email: "",
+  location_id: "",
   payment_mode: "",
   pageVisited: [],
   accept_preauth_terms_and_conditions: "",
@@ -70,7 +71,7 @@ const formSlice = createSlice({
         state[field] = value;
       }
       try {
-        localStorage.setItem("providentMoveOutData", JSON.stringify(state));
+        localStorage.setItem("paftFormData", JSON.stringify(state));
       } catch (error) {}
     },
     clearForm: (state) => {
@@ -78,15 +79,12 @@ const formSlice = createSlice({
         state,
         JSON.parse(JSON.stringify(emptyForm)) as FormState,
       );
-      localStorage.setItem(
-        "providentMoveOutData",
-        JSON.stringify(emptyFormInstance),
-      );
+      localStorage.setItem("paftFormData", JSON.stringify(emptyFormInstance));
     },
     addPageVisit: (state, action: PayloadAction<string>) => {
       if (!state.pageVisited.includes(action.payload)) {
         state.pageVisited.push(action.payload);
-        localStorage.setItem("providentMoveOutData", JSON.stringify(state));
+        localStorage.setItem("paftFormData", JSON.stringify(state));
       }
     },
   },

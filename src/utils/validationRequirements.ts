@@ -1,6 +1,10 @@
 export const validationRequirements = [
   {
     id: "/",
+    fields: [{ name: "selected_address" }, { name: "selected_unit" }],
+  },
+  {
+    id: "/page2",
     fields: [
       { name: "first_name" },
       { name: "last_name" },
@@ -9,14 +13,14 @@ export const validationRequirements = [
     ],
   },
   {
-    id: "/page2",
+    id: "/page3",
     fields: [
       { name: "payment_mode" },
       { name: "accept_preauth_terms_and_conditions" },
     ],
   },
   {
-    id: "/page3",
+    id: "/page4",
     fields: [
       {
         conditional: "payment_mode",
@@ -46,13 +50,13 @@ export const validationRequirements = [
       },
     ],
   },
-  { id: "/page4", fields: [{ name: "accept_terms_and_conditions" }] },
+  { id: "/page5", fields: [{ name: "accept_terms_and_conditions" }] },
   {
-    id: "/page5",
+    id: "/page6",
     fields: [
       { name: "verify_entered_information" },
       { name: "signature_image" },
     ],
   },
-  { id: "/page6", fields: [] },
+  { id: "/page7", fields: [] },
 ];

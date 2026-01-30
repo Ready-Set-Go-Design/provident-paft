@@ -1,148 +1,146 @@
 import { useDispatch, useSelector } from "react-redux";
-import { clearForm } from "./store/formSlice";
-import { clearSubmission, updateField } from "./store/submissionSlice";
+import { updateField } from "./store/formSlice";
 import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
 import { useNavigate } from "react-router";
-
-import { withPrefix } from "./utils/withPrefix";
-import { Button } from "./components/button";
+import SignatureCanvas from "react-signature-canvas";
 import { useEffect, useRef, useState } from "react";
-import { submitForm } from "./utils/submitForm";
+import { withPrefix } from "./utils/withPrefix";
+import { isPageValid } from "./utils/isPageValid";
+import { useMeasure } from "react-use";
+import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage";
+import { Checkbox, CheckboxField } from "./components/checkbox";
+import { Button } from "./components/button";
 import { FooterWrapper } from "./components/FooterWrapper";
-import { requestPDF } from "./utils/requestPDF";
 
 function FormPage6() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const hasSubmitted = useRef(false);
   const formData = useSelector((state: RootState) => state.form);
-  const submissionData = useSelector((state: RootState) => state.submission);
-  const [pdfDownloadError, setPdfDownloadError] = useState<string | null>(null);
+  const sigCanvas = useRef<SignatureCanvas | null>(null);
+  const [showValidationError, setShowValidationError] =
+    useState<boolean>(false);
+  const pageIsValid = isPageValid("/page6");
 
-  const { submitted, error } = submissionData;
-
-  useEffect(() => {
-    // submit form
-    if (
-      !submitted &&
-      formData &&
-      formData.signature_image > "" &&
-      !hasSubmitted.current
-    ) {
-      doSubmitForm();
-      hasSubmitted.current = true;
-    }
-  }, [submitted, formData]);
-
-  const doSubmitForm = async () => {
-    try {
-      const submission = await submitForm(formData);
-
-      if (submission.result === true) {
-        dispatch(
-          updateField({
-            field: "submission_id",
-            value: submission.submissionId,
-          }),
-        );
-        dispatch(updateField({ field: "submitted", value: true }));
-      } else {
-        dispatch(updateField({ field: "error", value: submission.error }));
-      }
-    } catch (error) {
-      dispatch(updateField({ field: "error", value: error as string }));
+  const clearForm = () => {
+    if (sigCanvas.current) {
+      sigCanvas.current.clear();
+      dispatch(updateField({ field: "signature_image", value: "" }));
     }
   };
 
-  if (!submitted && !error) {
-    return (
-      <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
-        <h1 className={withPrefix("py-4 text-2xl")}>Submitting Agreement...</h1>
-      </div>
-    );
-  }
+  const [containerRef, { width, height }] = useMeasure();
 
-  if (!submitted && error) {
-    return (
-      <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
-        <h1 className={withPrefix("py-4 text-2xl")}>Submission Error</h1>
-        <div className={withPrefix("mb-4")}>
-          <div className={withPrefix("mt-4 mb-4")}>
-            There was a problem submitting your agreement. Please go back and
-            try again.
-          </div>
-        </div>
-        <div className={withPrefix("mt-8 flex")}>
-          <div>
-            <NavButton
-              outline={true}
-              action={() => {
-                dispatch(clearForm());
-                dispatch(clearSubmission());
-                navigate("/");
-              }}
-              label={"Start Over"}
-              currentPage=""
-            />
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const redrawSignature = () => {
+    if (formData.signature_image && sigCanvas.current) {
+      sigCanvas.current.clear();
+      const img = new window.Image();
+      img.addEventListener("load", function () {
+        sigCanvas.current?.getCanvas().getContext("2d")?.drawImage(img, 0, 0);
+      });
+      img.setAttribute("src", formData.signature_image);
+    }
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setTimeout(redrawSignature, 100);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [formData.signature_image]);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(redrawSignature, 100);
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
-      <h1 className={withPrefix("py-4 text-2xl")}>Submission Complete</h1>
+      <h1 className={withPrefix("py-4 text-2xl")}>Signature</h1>
       <div className={withPrefix("mb-4")}>
-        <h1>
-          Thanks for completing the Customer Service Agreement with Provident
-          Energy Management Inc.
-        </h1>
-        <div className={withPrefix("mb-4 mt-4")}>
-          A copy of this contract will be sent to{" "}
-          <strong>{formData.email}</strong>.
+        <div>
+          By typing your name in the fields below, you are legally signing this
+          digital form.
         </div>
+
+        <div
+          className={`${formData.signature_image === "" ? "sig-canvas" : ""} ${withPrefix(
+            "border-1 rounded p-4 mt-4 w-full h-full min-h-[130px] mb-4",
+            showValidationError && formData.signature_image === ""
+              ? "border-red-500"
+              : "border-gray-300",
+          )} `}
+          ref={containerRef as unknown as React.RefObject<HTMLDivElement>}
+        >
+          <SignatureCanvas
+            penColor="#26aae1"
+            canvasProps={{
+              width: width,
+              height: "200px",
+              className: "sigCanvas",
+            }}
+            onEnd={() => {
+              const base64 = sigCanvas.current?.toDataURL();
+              if (base64) {
+                dispatch(
+                  updateField({
+                    field: "signature_image",
+                    value: base64 as string,
+                  }),
+                );
+              }
+            }}
+            ref={sigCanvas}
+          />
+        </div>
+        <Button color="white" onClick={clearForm}>
+          Clear
+        </Button>
+        <CheckboxField
+          className={withPrefix(
+            "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
+            showValidationError && formData.verify_entered_information === ""
+              ? "border-red-500"
+              : "border-transparent",
+          )}
+        >
+          <Checkbox
+            color="green"
+            name="verify_entered_information"
+            value={formData.verify_entered_information}
+            checked={formData.verify_entered_information == "true"}
+            onChange={(checked) => {
+              dispatch(
+                updateField({
+                  field: "verify_entered_information",
+                  value: checked ? "true" : "",
+                }),
+              );
+            }}
+          />{" "}
+          I verify that all information entered is correct
+        </CheckboxField>
       </div>
 
-      <div className={withPrefix("flex gap-2 mt-8")}>
-        <Button
-          onClick={async () => {
-            console.log("clicking");
-            console.log(submissionData);
-            setPdfDownloadError(null);
-            try {
-              // Check if we have a PDF blob from the new API response
-              if (submissionData && submissionData.submission_id) {
-                await requestPDF(submissionData.submission_id);
+      <div className={withPrefix("mt-4")}>
+        <AllFieldsRequiredMessage show={showValidationError} id="/page6" />
+        <FooterWrapper>
+          <NavButton
+            label="Submit"
+            action={() => {
+              if (pageIsValid) {
+                navigate("/form_page7");
+              } else {
+                setShowValidationError(true);
               }
-            } catch (error) {
-              const errorMessage =
-                error instanceof Error ? error.message : String(error);
-              setPdfDownloadError(errorMessage);
-            }
-          }}
-        >
-          Download PDF
-        </Button>
-        {pdfDownloadError && (
-          <div className={withPrefix("text-(--validation-error-color)")}>
-            Error downloading PDF: {pdfDownloadError}
-          </div>
-        )}
+            }}
+            currentPage="page6"
+            disabledButClickable={!pageIsValid}
+          />
+        </FooterWrapper>
       </div>
-      <FooterWrapper>
-        <NavButton
-          outline={true}
-          action={() => {
-            dispatch(clearForm());
-            dispatch(clearSubmission());
-            navigate("/");
-          }}
-          label={"Start Over"}
-          currentPage=""
-        />
-      </FooterWrapper>
     </div>
   );
 }
